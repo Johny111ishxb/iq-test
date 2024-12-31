@@ -374,7 +374,7 @@ const IQTest = () => {
           <CardTitle className="flex items-center justify-center gap-2">
             <motion.div
               animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
             >
               <Brain className="h-6 w-6" />
             </motion.div>
@@ -383,185 +383,46 @@ const IQTest = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           {stage === 'start' && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="space-y-6"
-            >
-              <div className="text-center space-y-4">
-                <Input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter your name"
-                  className="max-w-xs mx-auto"
-                />
-                <Input
-                  type="number"
-                  value={age}
-                  onChange={(e) => setAge(e.target.value)}
-                  placeholder="Enter your age (16+)"
-                  className="max-w-xs mx-auto"
-                />
-                {showAgeWarning && (
-                  <div className="text-red-500 flex items-center justify-center gap-2">
-                    <AlertCircle className="h-4 w-4" />
-                    You must be 16 or older to take this test
-                  </div>
-                )}
-              </div>
-
-              <div className="border rounded-lg p-4">
-                <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                  <Trophy className="h-5 w-5 text-yellow-500" />
-                  Top Scores
-                </h3>
-                <div className="space-y-2">
-                  {topScores.map((score, index) => (
-                    <div key={score.id} className="flex justify-between items-center">
-                      <span className="flex items-center gap-2">
-                        {index + 1}.
-                        <span className="font-medium">{score.name}</span>
-                      </span>
-                      <span className="font-bold">{score.score}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-4 text-sm text-gray-500 text-center">
-                  Total Tests Taken: {totalTests}
-                </div>
-              </div>
-
-              <div className="text-center">
-                <Button
-                  onClick={startTest}
-                  disabled={!age || !name}
-                  className="mt-4"
-                >
-                  Start Test
-                </Button>
-              </div>
-            </motion.div>
+            <div className="space-y-6">
+              <Input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Enter your name"
+              />
+              <Input
+                type="number"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+                placeholder="Enter your age (16+)"
+              />
+              {showAgeWarning && <div className="text-red-500">You must be 16 or older to take this test</div>}
+              <Button onClick={startTest} disabled={!name || !age}>
+                Start Test
+              </Button>
+            </div>
           )}
-
-          {stage === 'test' && questions[currentQuestion] && (
-            <motion.div
-              key={currentQuestion}
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="space-y-4"
-            >
-              <div className="flex justify-between items-center">
-                <span>Question {currentQuestion + 1} of {questions.length}</span>
-                <span className="flex items-center gap-2">
-                  <Timer className="h-4 w-4" />
-                  {formatTime(timeLeft)}
-                </span>
-              </div>
-              <div className="p-4 rounded-lg border border-gray-200">
-                <p className="text-lg font-medium mb-4">{questions[currentQuestion].question}</p>
-                <div className="space-y-2">
-                  {questions[currentQuestion].options.map((option, index) => (
-                    <motion.div
-                      key={index}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <Button
-                        onClick={() => handleAnswer(index)}
-                        variant="outline"
-                        className={`w-full text-left justify-start ${
-                          isAnswerRevealed
-                            ? index === questions[currentQuestion].correct
-                              ? 'bg-green-100 border-green-500 text-green-700'
-                              : index === selectedAnswer
-                              ? 'bg-red-100 border-red-500 text-red-700'
-                              : ''
-                            : ''
-                        }`}
-                        disabled={isAnswerRevealed}
-                      >
-                        <div className="flex items-center justify-between w-full">
-                          <span>{option}</span>
-                          {isAnswerRevealed && index === questions[currentQuestion].correct && (
-                            <CheckCircle2 className="h-5 w-5 text-green-500" />
-                          )}
-                          {isAnswerRevealed && index === selectedAnswer && index !== questions[currentQuestion].correct && (
-                            <XCircle className="h-5 w-5 text-red-500" />
-                          )}
-                        </div>
-                      </Button>
-                    </motion.div>
-                  ))}
-                </div>
-                {isAnswerRevealed && (
-                  <div className="mt-4 text-sm text-gray-600">
-                    {questions[currentQuestion].explanation}
-                  </div>
-                )}
-              </div>
-            </motion.div>
+          {stage === 'test' && (
+            <div>
+              <p>Test content goes here...</p>
+            </div>
           )}
-
           {stage === 'result' && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center space-y-6"
-            >
-              <h3 className="text-2xl font-bold">
-                {name}'s Results
-              </h3>
-              <div className="space-y-2">
-                <p className="text-xl">
-                  IQ Score: <span className="font-bold">{score}</span>
-                </p>
-                <p className="text-lg">
-                  Raw Score: <span className="font-bold">{rawScore}%</span>
-                </p>
-                <p className="text-gray-600">
-                  Time taken: {formatTime(Math.floor(totalTime))}
-                </p>
-              </div>
-              <div className="flex justify-center gap-2">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <motion.div
-                    key={star}
-                    whileHover={{ scale: 1.2 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <Star
-                      className={`h-8 w-8 cursor-pointer ${
-                        star <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
-                      }`}
-                      onClick={() => setRating(star)}
-                    />
-                  </motion.div>
-                ))}
-              </div>
-              <div className="flex justify-center gap-4">
-                <Button onClick={shareResult} className="flex items-center gap-2">
-                  <Share2 className="h-4 w-4" />
-                  Share Result
-                </Button>
-                <Button
-                  onClick={() => {
-                    setStage('start');
-                    setCurrentQuestion(0);
-                    setAnswers([]);
-                    setScore(0);
-                    setAge('');
-                    setName('');
-                    setRating(0);
-                    setShowAgeWarning(false);
-                  }}
-                >
-                  Take Test Again
-                </Button>
-              </div>
-            </motion.div>
+            <div>
+              <h3>Results</h3>
+              <p>Score: {score}</p>
+              <Button onClick={shareResult}>Share Results</Button>
+            </div>
           )}
         </CardContent>
+        <div className="text-center mt-4">
+          <p>
+            Made with ❤️ by{' '}
+            <a href="https://your-profile-link.com" className="text-blue-500 underline">
+              Salman
+            </a>
+          </p>
+        </div>
       </Card>
     </motion.div>
   );
